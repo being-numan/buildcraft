@@ -1,7 +1,17 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitType from "split-type";
+
+// Try different import methods for SplitType
+let SplitType;
+try {
+  SplitType = require("split-type").default;
+} catch (e) {
+  console.warn(
+    "SplitType import failed, will try to use window.SplitType if available"
+  );
+}
+
 import aboutImage from "../assets/about-image.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,83 +23,108 @@ const About = () => {
   const imageRef = useRef(null);
 
   useEffect(() => {
-    // Split text for animation
-    const heading = new SplitType(headingRef.current, { types: "lines" });
+    // Make sure content is visible first as a fallback
+    if (headingRef.current) gsap.set(headingRef.current, { opacity: 1, y: 0 });
+    textRefs.current.forEach((ref) => gsap.set(ref, { opacity: 1, y: 0 }));
+    if (imageRef.current) gsap.set(imageRef.current, { opacity: 1, y: 0 });
 
-    const paragraphs = textRefs.current.map(
-      (ref) => new SplitType(ref, { types: "lines" })
-    );
+    // Safety check for SplitType
+    if (typeof SplitType !== "function" || !window.SplitType) {
+      console.error(
+        "SplitType is not available. Content will be visible but not animated."
+      );
+      return;
+    }
 
-    // Create scroll animations
-    gsap.fromTo(
-      heading.lines,
-      { y: 100, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: "top bottom-=100",
-          toggleActions: "play none none none",
-        },
+    try {
+      // Try using SplitType directly or from window
+      const SplitTypeLib =
+        typeof SplitType === "function" ? SplitType : window.SplitType;
+
+      // Split text for animation
+      const heading = new SplitTypeLib(headingRef.current, { types: "lines" });
+
+      const paragraphs = textRefs.current.map(
+        (ref) => new SplitTypeLib(ref, { types: "lines" })
+      );
+
+      // Create scroll animations only if splitting worked
+      if (heading.lines && heading.lines.length) {
+        gsap.fromTo(
+          heading.lines,
+          { y: 100, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top bottom-=100",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+
+        // Animate paragraphs
+        paragraphs.forEach((split, index) => {
+          if (split.lines && split.lines.length) {
+            gsap.fromTo(
+              split.lines,
+              { y: 50, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                stagger: 0.05,
+                duration: 0.6,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: textRefs.current[index],
+                  start: "top bottom-=50",
+                  toggleActions: "play none none none",
+                },
+              }
+            );
+          }
+        });
       }
-    );
 
-    // Animate paragraphs
-    paragraphs.forEach((split, index) => {
+      // Animate image appearance with parallax
       gsap.fromTo(
-        split.lines,
-        { y: 50, opacity: 0 },
+        imageRef.current,
+        {
+          y: 50, // Less extreme initial position
+          opacity: 0.5, // Start with some visibility
+          scale: 0.95, // Less extreme scale
+        },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.05,
-          duration: 0.6,
-          ease: "power3.out",
+          scale: 1,
+          duration: 1,
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: textRefs.current[index],
-            start: "top bottom-=50",
+            trigger: imageRef.current,
+            start: "top bottom-=100",
             toggleActions: "play none none none",
           },
         }
       );
-    });
 
-    // Animate image appearance with parallax
-    gsap.fromTo(
-      imageRef.current,
-      {
-        y: 100,
-        opacity: 0,
-        scale: 0.9,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: "power2.out",
+      // Create parallax effect for image when scrolling
+      gsap.to(imageRef.current, {
+        y: -40, // Less extreme movement
         scrollTrigger: {
-          trigger: imageRef.current,
-          start: "top bottom-=100",
-          toggleActions: "play none none none",
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
         },
-      }
-    );
-
-    // Create parallax effect for image when scrolling
-    gsap.to(imageRef.current, {
-      y: -80,
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
+      });
+    } catch (error) {
+      console.error("Error setting up animations:", error);
+    }
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
@@ -104,8 +139,10 @@ const About = () => {
 
   return (
     <section
+      id="about" // Add ID for direct navigation
       ref={sectionRef}
       className="py-24 md:py-32 bg-neutral-950 relative overflow-hidden"
+      style={{ visibility: "visible", opacity: 1 }} // Ensure section is visible
     >
       <div className="container mx-auto px-6">
         <div className="relative z-10 max-w-6xl mx-auto">
@@ -113,41 +150,59 @@ const About = () => {
             <div>
               <h2
                 ref={headingRef}
-                className="text-3xl md:text-4xl xl:text-5xl font-bold mb-8 text-white overflow-hidden leading-tight"
+                className="text-3xl md:text-4xl xl:text-5xl font-bold mb-8 text-white leading-tight"
+                style={{ opacity: 1 }} // Initial visibility fallback
               >
-                We're not just builders.
-                <br />
-                We're innovators.
+                From Vision to Reality
+                <br />— We Make It Happen
               </h2>
 
               <div className="space-y-6 text-neutral-300">
-                <p ref={addToRefs} className="overflow-hidden leading-relaxed">
-                  At BuildCraft, we take pride in being a leading provider of
-                  contracting and technical services, delivering high-quality
-                  solutions for residential, commercial, and industrial projects
-                  across the United Arab Emirates.
+                <p
+                  ref={addToRefs}
+                  className="leading-relaxed"
+                  style={{ opacity: 1 }} // Initial visibility fallback
+                >
+                  At BuildCraft, we are committed to delivering excellence in
+                  contracting and facilities management services across Dubai
+                  and the wider UAE. With a deep understanding of the region’s
+                  dynamic real estate and infrastructure landscape, we provide
+                  reliable, efficient, and sustainable solutions tailored to
+                  meet the unique needs of residential, commercial, and
+                  industrial clients.
                 </p>
 
-                <p ref={addToRefs} className="overflow-hidden leading-relaxed">
-                  With a strong commitment to quality, safety, and customer
-                  satisfaction, we ensure that every project is executed with
-                  precision and excellence.
+                <p
+                  ref={addToRefs}
+                  className="leading-relaxed"
+                  style={{ opacity: 1 }} // Initial visibility fallback
+                >
+                  Our team brings together years of hands-on experience in
+                  construction, maintenance, and integrated facility services.
+                  From fit-outs and refurbishments to HVAC, electrical,
+                  plumbing, and cleaning services — we ensure every project is
+                  executed with the highest standards of safety, quality, and
+                  professionalism.
                 </p>
 
-                <p ref={addToRefs} className="overflow-hidden leading-relaxed">
-                  Our team of skilled professionals is dedicated to delivering
-                  innovative and cost-effective solutions that not only meet but
-                  exceed expectations.
+                <p
+                  ref={addToRefs}
+                  className="leading-relaxed"
+                  style={{ opacity: 1 }} // Initial visibility fallback
+                >
+                  Whether you are looking to develop, maintain, or optimize your
+                  property, BuildCraft is your trusted partner for smart,
+                  sustainable solutions.
                 </p>
               </div>
 
               <div className="mt-10">
-                <button className="group flex items-center">
-                  {/* <span className="text-white font-medium mr-3 relative overflow-hidden">
+                {/* <button className="group flex items-center">
+                  <span className="text-white font-medium mr-3 relative overflow-hidden">
                     Discover our story
                     <span className="block h-0.5 w-full bg-white/30 mt-1 group-hover:w-0 transition-all duration-300"></span>
                     <span className="block h-0.5 w-0 bg-white absolute bottom-0 left-0 group-hover:w-full transition-all duration-300"></span>
-                  </span> */}
+                  </span>
                   <svg
                     className="w-5 h-5 text-white transform group-hover:translate-x-1 transition-transform duration-300"
                     fill="none"
@@ -162,11 +217,15 @@ const About = () => {
                       d="M17 8l4 4m0 0l-4 4m4-4H3"
                     ></path>
                   </svg>
-                </button>
+                </button> */}
               </div>
             </div>
 
-            <div ref={imageRef} className="relative aspect-square">
+            <div
+              ref={imageRef}
+              className="relative aspect-square"
+              style={{ opacity: 1 }} // Initial visibility fallback
+            >
               <div className="relative aspect-square rounded-lg overflow-hidden">
                 <img
                   src={aboutImage}

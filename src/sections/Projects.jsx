@@ -15,43 +15,39 @@ const Projects = () => {
   const headingRef = useRef(null);
   const projectsRef = useRef(null);
 
-  // Sample project data - replace with actual project data
-  const projects = [
+  // Example projects - these are NOT specific to your company
+  const projectExamples = [
     {
       id: 1,
-      title: "Commercial Tower HVAC Overhaul",
+      title: "Commercial Tower Systems",
       category: "Electromechanical",
       description:
-        "Complete modernization of HVAC systems in a 30-story commercial tower, resulting in 40% energy savings.",
+        "State-of-the-art electromechanical solutions for commercial buildings, dramatically improving energy efficiency and system performance.",
       image: project1Image,
-      year: "2024",
     },
     {
       id: 2,
-      title: "Luxury Villa Renovation",
+      title: "Luxury Property Enhancement",
       category: "Contracting & Technical",
       description:
-        "Comprehensive renovation of a 15,000 sq ft luxury villa, including structural enhancements and smart home integration.",
+        "Comprehensive technical enhancement including structural improvements and modern system integration for premium properties.",
       image: project2Image,
-      year: "2023",
     },
     {
       id: 3,
-      title: "Hotel MEP Infrastructure",
+      title: "Hospitality MEP Infrastructure",
       category: "Plumbing & MEP",
       description:
-        "Installation of mechanical, electrical, and plumbing systems for a new 5-star hotel with 200+ rooms.",
+        "Advanced mechanical, electrical, and plumbing systems designed for hospitality environments, enhancing comfort and efficiency.",
       image: project3Image,
-      year: "2023",
     },
     {
       id: 4,
-      title: "Shopping Mall Air Filtration",
+      title: "Commercial Air Quality Solutions",
       category: "Air-Conditioning",
       description:
-        "Implementation of advanced air filtration and purification systems in a major shopping mall.",
+        "Implementation of next-generation air filtration and climate control technology for large commercial spaces.",
       image: project4Image,
-      year: "2022",
     },
   ];
 
@@ -116,6 +112,61 @@ const Projects = () => {
     setActiveProject(index);
   };
 
+  // Creative overlay effects for project images
+  const getImageOverlay = (index) => {
+    const overlays = [
+      // Overlay for Electromechanical
+      <div className="absolute inset-0" key="overlay-1">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-transparent mix-blend-overlay"></div>
+        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
+        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="circuit-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
+            <path d="M 10 0 L 10 10 M 0 10 L 20 10" fill="none" stroke="white" strokeWidth="0.5"></path>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#circuit-pattern)"></rect>
+        </svg>
+      </div>,
+      
+      // Overlay for Contracting & Technical
+      <div className="absolute inset-0" key="overlay-2">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/30 to-transparent mix-blend-overlay"></div>
+        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
+        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="blueprint-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
+            <path d="M 0 0 L 20 0 L 20 20 L 0 20 Z" fill="none" stroke="white" strokeWidth="0.5"></path>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#blueprint-pattern)"></rect>
+        </svg>
+      </div>,
+      
+      // Overlay for Plumbing & MEP
+      <div className="absolute inset-0" key="overlay-3">
+        <div className="absolute inset-0 bg-gradient-to-br from-green-500/30 to-transparent mix-blend-overlay"></div>
+        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
+        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="pipes-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
+            <path d="M 0 10 L 20 10 M 10 0 L 10 20" fill="none" stroke="white" strokeWidth="0.5"></path>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#pipes-pattern)"></rect>
+        </svg>
+      </div>,
+      
+      // Overlay for Air-Conditioning
+      <div className="absolute inset-0" key="overlay-4">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-transparent mix-blend-overlay"></div>
+        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
+        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="waves-pattern" patternUnits="userSpaceOnUse" width="20" height="10" x="0" y="0">
+            <path d="M 0 5 C 5 0, 15 0, 20 5" fill="none" stroke="white" strokeWidth="0.5"></path>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#waves-pattern)"></rect>
+        </svg>
+      </div>
+    ];
+    
+    return overlays[index];
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -132,11 +183,10 @@ const Projects = () => {
             ref={headingRef}
             className="text-3xl md:text-4xl xl:text-5xl font-bold text-white mb-6"
           >
-            Our Projects
+            Our Expertise
           </h2>
           <p className="text-neutral-400">
-            Browse through our portfolio of successfully completed projects that
-            demonstrate our expertise and commitment to excellence.
+            Explore our specialized service areas that showcase our technical capabilities through examples of projects in different sectors.
           </p>
         </div>
 
@@ -145,7 +195,7 @@ const Projects = () => {
           <div className="grid md:grid-cols-5 gap-8">
             {/* Project Thumbnails */}
             <div className="md:col-span-2 space-y-4">
-              {projects.map((project, index) => (
+              {projectExamples.map((project, index) => (
                 <motion.div
                   key={project.id}
                   className={`p-0.5 rounded-lg relative cursor-pointer transition-all duration-300 ${
@@ -172,9 +222,6 @@ const Projects = () => {
                           {project.title}
                         </h3>
                       </div>
-                      <span className="text-sm text-neutral-500">
-                        {project.year}
-                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -190,13 +237,15 @@ const Projects = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                {/* Project Image - Replace with actual project images */}
+                {/* Project Image with Creative Overlay */}
                 <div className="h-64 md:h-72 relative overflow-hidden">
                   <img
-                    src={projects[activeProject].image}
-                    alt={projects[activeProject].title}
+                    src={projectExamples[activeProject].image}
+                    alt={projectExamples[activeProject].title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
+                  {/* Creative overlay based on project type */}
+                  {getImageOverlay(activeProject)}
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 to-transparent opacity-60"></div>
                 </div>
 
@@ -204,25 +253,40 @@ const Projects = () => {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <p className="text-primary mb-1">
-                        {projects[activeProject].category}
+                        {projectExamples[activeProject].category}
                       </p>
                       <h3 className="text-xl font-bold text-white">
-                        {projects[activeProject].title}
+                        {projectExamples[activeProject].title}
                       </h3>
                     </div>
-                    <span className="text-neutral-500">
-                      {projects[activeProject].year}
-                    </span>
                   </div>
 
                   <p className="text-neutral-400">
-                    {projects[activeProject].description}
+                    {projectExamples[activeProject].description}
                   </p>
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {[
+                      "Energy Efficient", 
+                      "Smart Integration", 
+                      "Sustainable", 
+                      "Cost Effective", 
+                      "Innovative Design", 
+                      "High Performance"
+                    ].slice(activeProject, activeProject + 3).map((tag, idx) => (
+                      <span 
+                        key={idx} 
+                        className="inline-block px-3 py-1 rounded-full text-xs bg-neutral-800 text-primary"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
                   <div className="mt-6">
                     <button className="group flex items-center text-primary">
                       <span className="font-medium mr-3 relative overflow-hidden">
-                        View project details
+                        View service details
                         <span className="block h-0.5 w-full bg-primary/30 mt-1 group-hover:w-0 transition-all duration-300"></span>
                         <span className="block h-0.5 w-0 bg-primary absolute bottom-0 left-0 group-hover:w-full transition-all duration-300"></span>
                       </span>
