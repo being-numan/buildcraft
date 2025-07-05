@@ -325,14 +325,23 @@ const Services = () => {
   const handleMouseLeave = () => {
     setIsPaused(false);
   };
+
+  // Prevent body scroll when modal is open, allow modal content to scroll
   useEffect(() => {
     if (showModal) {
+      // Prevent background scrolling
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
+      // Restore background scrolling
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
     }
+    
+    // Cleanup function to ensure scrolling is restored
     return () => {
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
     };
   }, [showModal]);
 
@@ -824,7 +833,7 @@ const Services = () => {
         `}</style>
       </section>
 
-      {/* Amazing Modal */}
+      {/* Fixed Modal with Proper Scrolling */}
       <AnimatePresence>
         {showModal && modalService && (
           <motion.div
@@ -838,17 +847,17 @@ const Services = () => {
             {/* Backdrop */}
             <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
             
-            {/* Modal Content */}
+            {/* Modal Content - Fixed height and scrolling */}
             <motion.div
               variants={modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl bg-gradient-to-br from-neutral-900 to-neutral-950 border border-white/10 shadow-2xl"
+              className="relative w-full max-w-4xl h-[90vh] flex flex-col rounded-3xl bg-gradient-to-br from-neutral-900 to-neutral-950 border border-white/10 shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal Header */}
-              <div className="relative overflow-hidden">
+              {/* Fixed Modal Header */}
+              <div className="relative flex-shrink-0">
                 {/* Background Pattern */}
                 <div className="absolute inset-0">
                   <div 
@@ -867,23 +876,23 @@ const Services = () => {
                   </div>
                 </div>
 
-                <div className="relative p-8 md:p-12">
+                <div className="relative p-6 md:p-8">
                   {/* Close Button */}
                   <motion.button
                     onClick={closeModal}
-                    className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:bg-white/20 transition-all duration-300 group"
+                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:bg-white/20 transition-all duration-300 group z-10"
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <svg className="w-6 h-6 text-white group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-white group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </motion.button>
 
                   {/* Service Icon & Title */}
-                  <div className="flex items-center mb-6">
+                  <div className="flex items-center mb-4">
                     <motion.div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center mr-6"
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mr-4 md:mr-6"
                       style={{
                         backgroundColor: `${modalService.color}22`,
                         boxShadow: `0 20px 40px -12px ${modalService.color}40`,
@@ -894,111 +903,115 @@ const Services = () => {
                       <IconComponent
                         name={modalService.icon}
                         color={modalService.color}
-                        size={10}
+                        size={8}
                       />
                     </motion.div>
                     <div>
                       <h3 
-                        className="text-4xl md:text-5xl font-bold mb-2"
+                        className="text-2xl md:text-4xl font-bold mb-1"
                         style={{ color: modalService.color }}
                       >
                         {modalService.title}
                       </h3>
-                      <p className="text-neutral-400 text-lg">
+                      <p className="text-neutral-400 text-sm md:text-lg">
                         Professional Services & Solutions
                       </p>
                     </div>
                   </div>
                 </div>
+
+                {/* Top Border */}
+                <div className="absolute top-0 left-0 w-full h-1" style={{ backgroundColor: modalService.color }} />
               </div>
 
-              {/* Modal Body */}
-              <div className="px-8 md:px-12 pb-8 md:pb-12 overflow-y-auto max-h-[60vh]">
-                {/* Detailed Description */}
-                <div className="mb-8">
-                  <h4 className="text-2xl font-semibold text-white mb-4 flex items-center">
-                    <div 
-                      className="w-2 h-8 rounded-full mr-4"
-                      style={{ backgroundColor: modalService.color }}
-                    />
-                    Service Overview
-                  </h4>
-                  <p className="text-neutral-300 text-lg leading-relaxed">
-                    {modalService.detailedDescription}
-                  </p>
-                </div>
+              {/* Scrollable Modal Body - THIS ALLOWS VERTICAL SCROLLING */}
+              <div className="flex-1 overflow-y-auto px-6 md:px-8 pb-6 md:pb-8 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20 hover:scrollbar-thumb-white/30">
+                <div className="space-y-8">
+                  {/* Detailed Description */}
+                  <div>
+                    <h4 className="text-xl md:text-2xl font-semibold text-white mb-4 flex items-center">
+                      <div 
+                        className="w-2 h-6 md:h-8 rounded-full mr-3 md:mr-4"
+                        style={{ backgroundColor: modalService.color }}
+                      />
+                      Service Overview
+                    </h4>
+                    <p className="text-neutral-300 text-base md:text-lg leading-relaxed">
+                      {modalService.detailedDescription}
+                    </p>
+                  </div>
 
-                {/* Service Points Grid */}
-                <div className="mb-8">
-                  <h4 className="text-2xl font-semibold text-white mb-6 flex items-center">
-                    <div 
-                      className="w-2 h-8 rounded-full mr-4"
-                      style={{ backgroundColor: modalService.color }}
-                    />
-                    What We Offer
-                  </h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {modalService.servicePoints.map((point, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="group relative"
-                      >
-                        <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-white/5">
-                          <div className="flex items-center">
+                  {/* Service Points Grid */}
+                  <div>
+                    <h4 className="text-xl md:text-2xl font-semibold text-white mb-6 flex items-center">
+                      <div 
+                        className="w-2 h-6 md:h-8 rounded-full mr-3 md:mr-4"
+                        style={{ backgroundColor: modalService.color }}
+                      />
+                      What We Offer
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                      {modalService.servicePoints.map((point, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="group relative"
+                        >
+                          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-xl p-3 md:p-4 border border-white/10 hover:border-white/20 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-white/5">
+                            <div className="flex items-center">
+                              <div 
+                                className="w-2 h-2 md:w-3 md:h-3 rounded-full mr-3 md:mr-4 flex-shrink-0"
+                                style={{ backgroundColor: modalService.color }}
+                              />
+                              <p className="text-white text-sm md:text-base font-medium group-hover:text-white/90 transition-colors">
+                                {point}
+                              </p>
+                            </div>
+                            
+                            {/* Hover effect line */}
                             <div 
-                              className="w-3 h-3 rounded-full mr-4 flex-shrink-0"
+                              className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 rounded-full"
                               style={{ backgroundColor: modalService.color }}
                             />
-                            <p className="text-white font-medium group-hover:text-white/90 transition-colors">
-                              {point}
-                            </p>
                           </div>
-                          
-                          {/* Hover effect line */}
-                          <div 
-                            className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-500 rounded-full"
-                            style={{ backgroundColor: modalService.color }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Call to Action */}
-                <div className="text-center">
-                  <motion.button
-                    className="group relative px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 overflow-hidden"
-                    style={{
-                      backgroundColor: `${modalService.color}22`,
-                      border: `2px solid ${modalService.color}`,
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <span className="relative z-10 flex items-center justify-center">
-                      Get Quote for {modalService.title}
-                      <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </span>
-                    
-                    {/* Animated background */}
-                    <div 
-                      className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-xl"
-                      style={{ backgroundColor: `${modalService.color}33` }}
-                    />
-                  </motion.button>
+                  {/* Call to Action */}
+                  <div className="text-center pt-4">
+                    <motion.button
+                      className="group relative px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold text-white transition-all duration-300 overflow-hidden"
+                      style={{
+                        backgroundColor: `${modalService.color}22`,
+                        border: `2px solid ${modalService.color}`,
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="relative z-10 flex items-center justify-center text-sm md:text-base">
+                        Get Quote for {modalService.title}
+                        <svg className="w-4 h-4 md:w-5 md:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </span>
+                      
+                      {/* Animated background */}
+                      <div 
+                        className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-xl"
+                        style={{ backgroundColor: `${modalService.color}33` }}
+                      />
+                    </motion.button>
+                  </div>
                 </div>
               </div>
 
               {/* Decorative Elements */}
-              <div className="absolute top-0 left-0 w-full h-2" style={{ backgroundColor: modalService.color }} />
-              <div className="absolute bottom-0 right-0 w-32 h-32 opacity-5 overflow-hidden">
+              <div className="absolute bottom-0 right-0 w-24 h-24 md:w-32 md:h-32 opacity-5 overflow-hidden pointer-events-none">
                 <div 
                   className="w-full h-full rounded-full"
                   style={{ backgroundColor: modalService.color }}

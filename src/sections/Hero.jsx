@@ -319,171 +319,406 @@ const Hero = () => {
             </motion.div>
           </motion.div>
           
-          {/* Enhanced building animation container */}
+          {/* PREMIUM INTERACTIVE BUILDING ANIMATION CONTAINER */}
           <motion.div 
             ref={animationContainerRef}
-            className={`relative ${isMobile ? 'h-[350px] sm:h-[450px] mt-8 order-first' : 'h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px]'} w-full`}
+            className={`relative ${isMobile ? 'h-[350px] sm:h-[350px] mt-8 order-first' : 'h-[400px] md:h-[400px] lg:h-[600px] xl:h-[600px]'} w-full group`}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {/* Enhanced glassmorphism container */}
-            <div className={`absolute inset-0 bg-gradient-to-b from-slate-900/60 to-black/60 backdrop-blur-sm ${isMobile ? 'rounded-2xl' : 'rounded-xl'} border border-white/10 shadow-2xl overflow-hidden`}>
+            {/* Premium outer glow that responds to hover */}
+            <motion.div 
+              className="absolute -inset-8 rounded-3xl blur-2xl transition-all duration-1000"
+              animate={{
+                background: [
+                  'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
+                  'radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%)',
+                  'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)'
+                ]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            {/* Main container with premium glassmorphism */}
+            <div className={`relative w-full h-full ${isMobile ? 'rounded-3xl' : 'rounded-2xl'} overflow-hidden transition-all duration-1000 group-hover:shadow-2xl`}>
               
-              {/* Enhanced background patterns for mobile */}
-              {isMobile ? (
-                <div className="absolute inset-0">
-                  {/* Mobile-specific decorative elements */}
-                  <div className="absolute top-4 left-4 w-12 h-12 border-2 border-blue-500/20 rounded-full"></div>
-                  <div className="absolute top-4 right-4 w-8 h-8 border border-emerald-500/30 rotate-45"></div>
-                  <div className="absolute bottom-4 left-4 w-6 h-6 border border-indigo-500/25 rounded-full"></div>
-                  <div className="absolute bottom-4 right-4 w-10 h-10 border-2 border-blue-500/15 rotate-12"></div>
-                  
-                  {/* Mobile gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5"></div>
-                </div>
-              ) : (
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjAyIiBkPSJNMzYgMzRoLTJ2LTJoMnYyek0zMCAzNGgtMnYtMmgydjJ6TTI0IDM0aC0ydi0yaDJ2MnpNMTggMzRoLTJ2LTJoMnYyek0xMiAzNGgtMnYtMmgydjJ6TTYgMzRINHYtMmgydjJ6Ci8+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIuMDIiIGQ9Ik0yIDI4SDB2MmgydjJ6Ci8+PC9nPjwvc3ZnPg==')] opacity-10"></div>
-              )}
+              {/* Dynamic background that changes on hover */}
+              <div className="absolute inset-0 transition-all duration-1000 group-hover:bg-slate-900/70 bg-slate-900/30 backdrop-blur-sm"></div>
               
-              {/* Rive animation */}
-              <div className="relative h-full w-full flex items-center justify-center">
+              {/* Premium border gradient */}
+              <div className="absolute inset-0 rounded-inherit p-[1px] bg-gradient-to-r from-blue-400/30 via-emerald-400/40 to-indigo-400/30 group-hover:from-blue-400/60 group-hover:via-emerald-400/70 group-hover:to-indigo-400/60 transition-all duration-1000">
+                <div className={`w-full h-full rounded-inherit bg-transparent`}></div>
+              </div>
+              
+              {/* RIVE ANIMATION - Full visibility with premium frame */}
+              <div className="relative w-full h-full z-20">
                 <RiveComponent className="w-full h-full" />
               </div>
               
-              {/* Enhanced corner highlights with mobile optimization */}
-              <div className={`absolute top-0 left-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-t-2 border-l-2 border-blue-500/40`}></div>
-              <div className={`absolute top-0 right-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-t-2 border-r-2 border-emerald-500/40`}></div>
-              <div className={`absolute bottom-0 left-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-b-2 border-l-2 border-indigo-500/40`}></div>
-              <div className={`absolute bottom-0 right-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-b-2 border-r-2 border-blue-500/40`}></div>
+              {/* Interactive corner highlights that pulse during hover */}
+              <motion.div 
+                className={`absolute top-0 left-0 ${isMobile ? 'w-16 h-16' : 'w-20 h-20'} border-l-2 border-t-2 rounded-tl-2xl pointer-events-none transition-all duration-1000`}
+                animate={{ 
+                  borderColor: [
+                    'rgba(59, 130, 246, 0.4)', 
+                    'rgba(59, 130, 246, 0.8)', 
+                    'rgba(59, 130, 246, 0.4)'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+                whileHover={{ scale: 1.1, borderColor: 'rgba(59, 130, 246, 1)' }}
+              />
               
-              {/* Enhanced glow overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-600/10 via-transparent to-emerald-600/10"></div>
+              <motion.div 
+                className={`absolute top-0 right-0 ${isMobile ? 'w-16 h-16' : 'w-20 h-20'} border-r-2 border-t-2 rounded-tr-2xl pointer-events-none transition-all duration-1000`}
+                animate={{ 
+                  borderColor: [
+                    'rgba(16, 185, 129, 0.4)', 
+                    'rgba(16, 185, 129, 0.8)', 
+                    'rgba(16, 185, 129, 0.4)'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                whileHover={{ scale: 1.1, borderColor: 'rgba(16, 185, 129, 1)' }}
+              />
               
-              {/* Desktop feature indicators */}
-              {!isMobile && isLoaded && features.map((feature, index) => {
-                const color = colorMap[feature.color];
-                const isActive = activeFeature === index;
-                
-                return (
-                  <motion.div
-                    key={feature.id}
-                    className={`absolute flex items-center ${isActive ? 'z-20' : 'z-10'}`}
-                    style={feature.position}
-                    initial={{ opacity: 0, x: feature.position.left ? -20 : 20 }}
-                    animate={{ 
-                      opacity: isActive ? 1 : 0.6,
-                      x: 0,
-                      scale: isActive ? 1.05 : 0.95
-                    }}
-                    transition={{ 
-                      duration: 0.5,
-                      delay: index * 0.2 + 1
-                    }}
-                    onClick={() => setActiveFeature(index)}
-                  >
-                    {feature.position.left ? (
-                      <>
-                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-3 px-4 rounded-lg mr-3 shadow-xl ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[220px]`}>
-                          <div className={`font-medium mb-2 ${color.text} flex items-center`}>
-                            <span className="mr-2">{feature.icon}</span>
-                            {feature.title}
-                          </div>
-                          <AnimatePresence>
-                            {isActive && (
-                              <motion.div 
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                className="text-white/85 text-xs leading-relaxed"
-                              >
-                                {feature.description}
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                        <div className="w-24 h-px bg-gradient-to-l from-transparent to-current opacity-60"></div>
-                        <div className={`w-4 h-4 ${color.secondary} rounded-full ${isActive ? 'animate-pulse shadow-lg' : ''} border border-white/20`}></div>
-                      </>
-                    ) : (
-                      <>
-                        <div className={`w-4 h-4 ${color.secondary} rounded-full ${isActive ? 'animate-pulse shadow-lg' : ''} border border-white/20`}></div>
-                        <div className="w-24 h-px bg-gradient-to-r from-current to-transparent opacity-60"></div>
-                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-3 px-4 rounded-lg ml-3 shadow-xl ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[220px]`}>
-                          <div className={`font-medium mb-2 ${color.text} flex items-center`}>
-                            <span className="mr-2">{feature.icon}</span>
-                            {feature.title}
-                          </div>
-                          <AnimatePresence>
-                            {isActive && (
-                              <motion.div 
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                className="text-white/85 text-xs leading-relaxed"
-                              >
-                                {feature.description}
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      </>
-                    )}
-                  </motion.div>
-                );
-              })}
+              <motion.div 
+                className={`absolute bottom-0 left-0 ${isMobile ? 'w-16 h-16' : 'w-20 h-20'} border-l-2 border-b-2 rounded-bl-2xl pointer-events-none transition-all duration-1000`}
+                animate={{ 
+                  borderColor: [
+                    'rgba(99, 102, 241, 0.4)', 
+                    'rgba(99, 102, 241, 0.8)', 
+                    'rgba(99, 102, 241, 0.4)'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity, delay: 2 }}
+                whileHover={{ scale: 1.1, borderColor: 'rgba(99, 102, 241, 1)' }}
+              />
               
-              {/* Enhanced rotating rings for desktop */}
-              {!isMobile && (
-                <>
-                  <motion.div 
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] border border-blue-500/15 rounded-full"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-                  ></motion.div>
-                  
-                  <motion.div 
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-emerald-500/15 rounded-full"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-                  ></motion.div>
-                </>
-              )}
+              <motion.div 
+                className={`absolute bottom-0 right-0 ${isMobile ? 'w-16 h-16' : 'w-20 h-20'} border-r-2 border-b-2 rounded-br-2xl pointer-events-none transition-all duration-1000`}
+                animate={{ 
+                  borderColor: [
+                    'rgba(34, 211, 238, 0.4)', 
+                    'rgba(34, 211, 238, 0.8)', 
+                    'rgba(34, 211, 238, 0.4)'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                whileHover={{ scale: 1.1, borderColor: 'rgba(34, 211, 238, 1)' }}
+              />
               
-              {/* Mobile floating indicators */}
-              {isMobile && isLoaded && (
-                <>
-                  {/* Mobile feature dots around animation */}
-                  <motion.div
-                    className="absolute top-6 left-6 w-3 h-3 bg-blue-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 0 }}
-                  />
-                  <motion.div
-                    className="absolute top-6 right-6 w-3 h-3 bg-emerald-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
-                  />
-                  <motion.div
-                    className="absolute bottom-6 left-1/2 -translate-x-1/2 w-3 h-3 bg-indigo-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 1.4 }}
-                  />
-                  
-                  {/* Mobile progress ring */}
-                  <motion.div 
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-transparent rounded-full"
-                    style={{
-                      background: `conic-gradient(from 0deg, transparent, ${colorMap[features[activeFeature].color].secondary}20, transparent)`
-                    }}
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  />
-                </>
-              )}
+              {/* Subtle overlay that enhances the night effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none z-10"></div>
+              
             </div>
+
+            {/* Desktop feature indicators - positioned outside with enhanced interactivity */}
+            {!isMobile && isLoaded && features.map((feature, index) => {
+              const color = colorMap[feature.color];
+              const isActive = activeFeature === index;
+              
+              return (
+                <motion.div
+                  key={feature.id}
+                  className="absolute flex items-center cursor-pointer z-30"
+                  style={feature.position}
+                  initial={{ opacity: 0, x: feature.position.left ? -30 : 30 }}
+                  animate={{ 
+                    opacity: isActive ? 1 : 0.6,
+                    x: 0,
+                    scale: isActive ? 1.1 : 0.9
+                  }}
+                  transition={{ 
+                    duration: 0.6,
+                    delay: index * 0.3 + 1.5
+                  }}
+                  onClick={() => setActiveFeature(index)}
+                  whileHover={{ scale: isActive ? 1.15 : 1.05 }}
+                >
+                  {feature.position.left ? (
+                    <>
+                      <motion.div 
+                        className={`${color.bg} backdrop-blur-xl text-white text-sm py-4 px-5 rounded-xl mr-4 shadow-2xl border ${color.border} transition-all duration-500 max-w-[280px] relative overflow-hidden`}
+                        animate={isActive ? {
+                          boxShadow: [
+                            '0 10px 25px rgba(0,0,0,0.1)',
+                            '0 20px 40px rgba(0,0,0,0.2)',
+                            '0 10px 25px rgba(0,0,0,0.1)'
+                          ]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {/* Premium card background with animated gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent"></div>
+                        <motion.div 
+                          className={`absolute inset-0 bg-gradient-to-r ${color.primary} opacity-0`}
+                          animate={isActive ? { opacity: [0, 0.1, 0] } : {}}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+                        
+                        <div className="relative z-10">
+                          <div className={`font-semibold mb-3 ${color.text} flex items-center`}>
+                            <motion.span 
+                              className="mr-3 text-xl"
+                              animate={isActive ? { 
+                                scale: [1, 1.2, 1],
+                                rotate: [0, 10, -10, 0]
+                              } : {}}
+                              transition={{ duration: 2, repeat: Infinity }}
+                            >
+                              {feature.icon}
+                            </motion.span>
+                            {feature.title}
+                          </div>
+                          <AnimatePresence>
+                            {isActive && (
+                              <motion.div 
+                                initial={{ opacity: 0, height: 0, y: -10 }}
+                                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                                exit={{ opacity: 0, height: 0, y: -10 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                className="text-white/90 text-sm leading-relaxed"
+                              >
+                                {feature.description}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        
+                        {/* Premium card accent line */}
+                        <motion.div 
+                          className={`absolute top-0 left-0 h-1 bg-gradient-to-r ${color.primary}`}
+                          animate={isActive ? { width: ['0%', '100%', '0%'] } : { width: '30%' }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+                      </motion.div>
+                      
+                      {/* Enhanced connecting line with animation */}
+                      <motion.div 
+                        className={`w-28 h-0.5 bg-gradient-to-l from-transparent via-current to-current opacity-40 ${color.text}`}
+                        animate={isActive ? {
+                          opacity: [0.4, 0.8, 0.4],
+                          scaleX: [1, 1.1, 1]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      
+                      {/* Premium indicator dot with ripple effect */}
+                      <motion.div 
+                        className={`w-5 h-5 ${color.secondary} rounded-full border-2 border-white/30 shadow-xl relative overflow-hidden`}
+                        animate={isActive ? { 
+                          scale: [1, 1.3, 1],
+                          boxShadow: [
+                            '0 0 0 0 rgba(255,255,255,0.3)',
+                            '0 0 0 10px rgba(255,255,255,0)',
+                            '0 0 0 0 rgba(255,255,255,0)'
+                          ]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent"></div>
+                        <motion.div 
+                          className={`absolute inset-1 ${color.secondary} rounded-full opacity-80`}
+                          animate={isActive ? { scale: [0.8, 1.2, 0.8] } : {}}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        />
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Premium indicator dot with ripple effect */}
+                      <motion.div 
+                        className={`w-5 h-5 ${color.secondary} rounded-full border-2 border-white/30 shadow-xl relative overflow-hidden`}
+                        animate={isActive ? { 
+                          scale: [1, 1.3, 1],
+                          boxShadow: [
+                            '0 0 0 0 rgba(255,255,255,0.3)',
+                            '0 0 0 10px rgba(255,255,255,0)',
+                            '0 0 0 0 rgba(255,255,255,0)'
+                          ]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent"></div>
+                        <motion.div 
+                          className={`absolute inset-1 ${color.secondary} rounded-full opacity-80`}
+                          animate={isActive ? { scale: [0.8, 1.2, 0.8] } : {}}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        />
+                      </motion.div>
+                      
+                      {/* Enhanced connecting line with animation */}
+                      <motion.div 
+                        className={`w-28 h-0.5 bg-gradient-to-r from-current via-current to-transparent opacity-40 ${color.text}`}
+                        animate={isActive ? {
+                          opacity: [0.4, 0.8, 0.4],
+                          scaleX: [1, 1.1, 1]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      
+                      <motion.div 
+                        className={`${color.bg} backdrop-blur-xl text-white text-sm py-4 px-5 rounded-xl ml-4 shadow-2xl border ${color.border} transition-all duration-500 max-w-[280px] relative overflow-hidden`}
+                        animate={isActive ? {
+                          boxShadow: [
+                            '0 10px 25px rgba(0,0,0,0.1)',
+                            '0 20px 40px rgba(0,0,0,0.2)',
+                            '0 10px 25px rgba(0,0,0,0.1)'
+                          ]
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {/* Premium card background with animated gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-bl from-white/10 via-transparent to-transparent"></div>
+                        <motion.div 
+                          className={`absolute inset-0 bg-gradient-to-l ${color.primary} opacity-0`}
+                          animate={isActive ? { opacity: [0, 0.1, 0] } : {}}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+                        
+                        <div className="relative z-10">
+                          <div className={`font-semibold mb-3 ${color.text} flex items-center`}>
+                            <motion.span 
+                              className="mr-3 text-xl"
+                              animate={isActive ? { 
+                                scale: [1, 1.2, 1],
+                                rotate: [0, -10, 10, 0]
+                              } : {}}
+                              transition={{ duration: 2, repeat: Infinity }}
+                            >
+                              {feature.icon}
+                            </motion.span>
+                            {feature.title}
+                          </div>
+                          <AnimatePresence>
+                            {isActive && (
+                              <motion.div 
+                                initial={{ opacity: 0, height: 0, y: -10 }}
+                                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                                exit={{ opacity: 0, height: 0, y: -10 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                className="text-white/90 text-sm leading-relaxed"
+                              >
+                                {feature.description}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                        
+                        {/* Premium card accent line */}
+                        <motion.div 
+                          className={`absolute top-0 right-0 h-1 bg-gradient-to-l ${color.primary}`}
+                          animate={isActive ? { width: ['0%', '100%', '0%'] } : { width: '30%' }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        />
+                      </motion.div>
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
+
+            {/* Enhanced rotating rings that react to hover */}
+            {!isMobile && (
+              <>
+                <motion.div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] border border-blue-500/20 rounded-full transition-all duration-1000 group-hover:border-blue-400/40"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                >
+                  <motion.div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-blue-400/60 rounded-full blur-sm group-hover:bg-blue-400 transition-all duration-1000"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </motion.div>
+                
+                <motion.div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-emerald-500/20 rounded-full transition-all duration-1000 group-hover:border-emerald-400/40"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                >
+                  <motion.div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-emerald-400/70 rounded-full blur-sm group-hover:bg-emerald-400 transition-all duration-1000"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 2.5, repeat: Infinity }}
+                  />
+                </motion.div>
+                
+                <motion.div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] border border-indigo-500/15 rounded-full transition-all duration-1000 group-hover:border-indigo-400/30"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                >
+                  <motion.div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-indigo-400/50 rounded-full blur-sm group-hover:bg-indigo-400 transition-all duration-1000"
+                    animate={{ scale: [1, 2, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                </motion.div>
+              </>
+            )}
+
+            {/* Enhanced mobile floating indicators that pulse with the building lights */}
+            {isMobile && isLoaded && (
+              <>
+                <motion.div
+                  className="absolute top-8 left-8 w-4 h-4 bg-blue-500 rounded-full shadow-lg border border-white/20"
+                  animate={{ 
+                    scale: [1, 1.4, 1], 
+                    opacity: [0.6, 1, 0.6],
+                    boxShadow: [
+                      '0 0 0 0 rgba(59, 130, 246, 0.4)',
+                      '0 0 0 8px rgba(59, 130, 246, 0)',
+                      '0 0 0 0 rgba(59, 130, 246, 0)'
+                    ]
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 0 }}
+                />
+                <motion.div
+                  className="absolute top-8 right-8 w-4 h-4 bg-emerald-500 rounded-full shadow-lg border border-white/20"
+                  animate={{ 
+                    scale: [1, 1.4, 1], 
+                    opacity: [0.6, 1, 0.6],
+                    boxShadow: [
+                      '0 0 0 0 rgba(16, 185, 129, 0.4)',
+                      '0 0 0 8px rgba(16, 185, 129, 0)',
+                      '0 0 0 0 rgba(16, 185, 129, 0)'
+                    ]
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 0.8 }}
+                />
+                <motion.div
+                  className="absolute bottom-8 left-1/2 -translate-x-1/2 w-4 h-4 bg-indigo-500 rounded-full shadow-lg border border-white/20"
+                  animate={{ 
+                    scale: [1, 1.4, 1], 
+                    opacity: [0.6, 1, 0.6],
+                    boxShadow: [
+                      '0 0 0 0 rgba(99, 102, 241, 0.4)',
+                      '0 0 0 8px rgba(99, 102, 241, 0)',
+                      '0 0 0 0 rgba(99, 102, 241, 0)'
+                    ]
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 1.6 }}
+                />
+              </>
+            )}
+
+            {/* Interactive tooltip for hover instructions (desktop only) */}
+            {!isMobile && (
+              <motion.div 
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+              >
+                🌙 Hover to see night mode & building lights
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>
