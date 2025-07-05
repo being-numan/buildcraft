@@ -1,16 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Simulated image imports - replace with your actual imports
-const technicalServicesImage = "/api/placeholder/600/400";
-const electmechicalWorksImage = "/api/placeholder/600/400";
-const scaffoldingFormworkImage = "/api/placeholder/600/400";
-const airConditioningImage = "/api/placeholder/600/400";
-const plumbingServicesImage = "/api/placeholder/600/400";
-const carpentryFlooringImage = "/api/placeholder/600/400";
-const falseCeilingPartitionsImage = "/api/placeholder/600/400";
-const plasterWorksImage = "/api/placeholder/600/400";
-const buildingCleaningImage = "/api/placeholder/600/400";
+import technicalServicesImage from "../assets/ts.jpeg";
+import electmechicalWorksImage from "../assets/ew.jpeg";
+import scaffoldingFormworkImage from "../assets/sfw.png";
+import airConditioningImage from "../assets/ac.jpeg";
+import plumbingServicesImage from "../assets/ps.jpeg";
+import carpentryFlooringImage from "../assets/cs.jpeg";
+import falseCeilingPartitionsImage from "../assets/fclp.jpeg";
+import plasterWorksImage from "../assets/mw.jpeg";
+import buildingCleaningImage from "../assets/bc.jpeg";
 
 // Updated services data with detailed descriptions and service points
 const services = [
@@ -255,6 +253,8 @@ const Services = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalService, setModalService] = useState(null);
+  const [isAutoSliding, setIsAutoSliding] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
 
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
@@ -301,7 +301,30 @@ const Services = () => {
     }
   }, []);
 
-  // Prevent body scroll when modal is open
+  // Auto-slide functionality
+  useEffect(() => {
+    if (!isAutoSliding || isPaused || showModal) return;
+
+    const autoSlideInterval = setInterval(() => {
+      if (!isAnimating) {
+        setDirection(1);
+        setIsAnimating(true);
+        setActiveService((prev) => (prev === services.length - 1 ? 0 : prev + 1));
+        setTimeout(() => setIsAnimating(false), 500);
+      }
+    }, 5000); // 5 seconds interval
+
+    return () => clearInterval(autoSlideInterval);
+  }, [isAutoSliding, isPaused, showModal, isAnimating]);
+
+  // Pause auto-slide on hover
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+  };
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = 'hidden';
@@ -320,6 +343,9 @@ const Services = () => {
     setDirection(-1);
     setActiveService((prev) => (prev === 0 ? services.length - 1 : prev - 1));
     setTimeout(() => setIsAnimating(false), 500);
+    // Temporarily pause auto-slide after manual navigation
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
   };
 
   const nextService = () => {
@@ -328,6 +354,9 @@ const Services = () => {
     setDirection(1);
     setActiveService((prev) => (prev === services.length - 1 ? 0 : prev + 1));
     setTimeout(() => setIsAnimating(false), 500);
+    // Temporarily pause auto-slide after manual navigation
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
   };
 
   const goToService = (index) => {
@@ -336,17 +365,24 @@ const Services = () => {
     setDirection(index > activeService ? 1 : -1);
     setActiveService(index);
     setTimeout(() => setIsAnimating(false), 500);
+    // Temporarily pause auto-slide after manual navigation
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
   };
 
   // Modal functions
   const openModal = (service) => {
     setModalService(service);
     setShowModal(true);
+    setIsPaused(true); // Pause auto-slide when modal opens
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setTimeout(() => setModalService(null), 300);
+    setTimeout(() => {
+      setModalService(null);
+      setIsPaused(false); // Resume auto-slide when modal closes
+    }, 300);
   };
 
   const handleImageLoad = () => {
@@ -514,7 +550,12 @@ const Services = () => {
           </div>
 
           {/* Main content area */}
-          <div ref={cardsContainerRef} className="relative max-w-6xl mx-auto">
+          <div 
+            ref={cardsContainerRef} 
+            className="relative max-w-6xl mx-auto"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             {/* Service cards with animation */}
             <div className="relative min-h-[500px] md:min-h-[600px] overflow-hidden">
               <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -675,7 +716,7 @@ const Services = () => {
             </div>
 
             {/* Navigation arrows */}
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between items-center mt-8">
               <motion.button
                 onClick={prevService}
                 className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 hover:bg-white/10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-neutral-900"
@@ -696,6 +737,27 @@ const Services = () => {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
+              </motion.button>
+
+              {/* Auto-slide control */}
+              <motion.button
+                onClick={() => setIsAutoSliding(!isAutoSliding)}
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/5 backdrop-blur-sm flex items-center justify-center border border-white/10 hover:bg-white/10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-neutral-900"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label={isAutoSliding ? "Pause auto-slide" : "Resume auto-slide"}
+                title={isAutoSliding ? "Pause auto-slide" : "Resume auto-slide"}
+              >
+                {isAutoSliding ? (
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12l4-4 4 4-4 4-4-4z" />
+                  </svg>
+                )}
               </motion.button>
 
               <motion.button
