@@ -164,12 +164,12 @@ const About = () => {
                   style={{ opacity: 1 }} // Initial visibility fallback
                 >
                   At BuildCraft, we are committed to delivering excellence in
-                  contracting and facilities management services across Dubai
-                  and the wider UAE. With a deep understanding of the region’s
-                  dynamic real estate and infrastructure landscape, we provide
-                  reliable, efficient, and sustainable solutions tailored to
-                  meet the unique needs of residential, commercial, and
-                  industrial clients.
+                  contracting and facilities management across Dubai and the
+                  wider UAE. With a deep understanding of the region's dynamic
+                  real estate and infrastructure landscape, we provide reliable,
+                  efficient, and sustainable solutions tailored to meet the
+                  unique needs of residential, commercial, and industrial
+                  clients.
                 </p>
 
                 <p
@@ -178,7 +178,7 @@ const About = () => {
                   style={{ opacity: 1 }} // Initial visibility fallback
                 >
                   Our team brings together years of hands-on experience in
-                  construction, maintenance, and integrated facility services.
+                  construction and integrated facility maintenance services.
                   From fit-outs and refurbishments to HVAC, electrical,
                   plumbing, and cleaning services — we ensure every project is
                   executed with the highest standards of safety, quality, and

@@ -312,7 +312,7 @@ const Contact = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-medium text-white">Email</h4>
-                    <p className="mt-1 text-neutral-400">Coming Soon</p>
+                    <p className="mt-1 text-neutral-400">info@buildcraftuae.com</p>
                   </div>
                 </div>
 
@@ -342,7 +342,7 @@ const Contact = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-medium text-white">Address</h4>
-                    <p className="mt-1 text-neutral-400">Dubai, UAE</p>
+                    <p className="mt-1 text-neutral-400">Residence 1072 , Al Mateena , DUBAI.</p>
                   </div>
                 </div>
               </div>
@@ -352,7 +352,7 @@ const Contact = () => {
               <div className="mt-6">
                 <iframe
                   className="w-full h-64 rounded-lg border border-neutral-800"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.8718850706274!2d55.2708!3d25.2048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f428c6b1bdb8b%3A0x4b05f3b6b6d1e47a!2sDubai!5e0!3m2!1sen!2sae!4v123456789"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.8561343909223!2d55.325942476204254!3d25.27542457766069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5d17a483d921%3A0x80ccfd3c8073fd9d!2sResidence%201072!5e0!3m2!1sen!2sin!4v1751348768887!5m2!1sen!2sin"
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"

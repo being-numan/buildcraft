@@ -9,44 +9,27 @@ import project4Image from "../assets/project-4.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Projects = () => {
-  const [activeProject, setActiveProject] = useState(0);
+const Gallery = () => {
+  const [activeImage, setActiveImage] = useState(0);
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
-  const projectsRef = useRef(null);
+  const galleryRef = useRef(null);
 
-  // Example projects - these are NOT specific to your company
-  const projectExamples = [
+  const galleryImages = [
     {
       id: 1,
-      title: "Commercial Tower Systems",
-      category: "Electromechanical",
-      description:
-        "State-of-the-art electromechanical solutions for commercial buildings, dramatically improving energy efficiency and system performance.",
       image: project1Image,
     },
     {
       id: 2,
-      title: "Luxury Property Enhancement",
-      category: "Contracting & Technical",
-      description:
-        "Comprehensive technical enhancement including structural improvements and modern system integration for premium properties.",
       image: project2Image,
     },
     {
       id: 3,
-      title: "Hospitality MEP Infrastructure",
-      category: "Plumbing & MEP",
-      description:
-        "Advanced mechanical, electrical, and plumbing systems designed for hospitality environments, enhancing comfort and efficiency.",
       image: project3Image,
     },
     {
       id: 4,
-      title: "Commercial Air Quality Solutions",
-      category: "Air-Conditioning",
-      description:
-        "Implementation of next-generation air filtration and climate control technology for large commercial spaces.",
       image: project4Image,
     },
   ];
@@ -69,9 +52,9 @@ const Projects = () => {
       }
     );
 
-    // Animation for projects container
+    // Animation for gallery container
     gsap.fromTo(
-      projectsRef.current,
+      galleryRef.current,
       { y: 100, opacity: 0 },
       {
         y: 0,
@@ -79,7 +62,7 @@ const Projects = () => {
         duration: 1,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: projectsRef.current,
+          trigger: galleryRef.current,
           start: "top bottom-=50",
           toggleActions: "play none none none",
         },
@@ -107,64 +90,9 @@ const Projects = () => {
     };
   }, []);
 
-  // Handle project click
-  const handleProjectClick = (index) => {
-    setActiveProject(index);
-  };
-
-  // Creative overlay effects for project images
-  const getImageOverlay = (index) => {
-    const overlays = [
-      // Overlay for Electromechanical
-      <div className="absolute inset-0" key="overlay-1">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-transparent mix-blend-overlay"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
-        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <pattern id="circuit-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
-            <path d="M 10 0 L 10 10 M 0 10 L 20 10" fill="none" stroke="white" strokeWidth="0.5"></path>
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#circuit-pattern)"></rect>
-        </svg>
-      </div>,
-      
-      // Overlay for Contracting & Technical
-      <div className="absolute inset-0" key="overlay-2">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/30 to-transparent mix-blend-overlay"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
-        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <pattern id="blueprint-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
-            <path d="M 0 0 L 20 0 L 20 20 L 0 20 Z" fill="none" stroke="white" strokeWidth="0.5"></path>
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#blueprint-pattern)"></rect>
-        </svg>
-      </div>,
-      
-      // Overlay for Plumbing & MEP
-      <div className="absolute inset-0" key="overlay-3">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-500/30 to-transparent mix-blend-overlay"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
-        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <pattern id="pipes-pattern" patternUnits="userSpaceOnUse" width="20" height="20" x="0" y="0">
-            <path d="M 0 10 L 20 10 M 10 0 L 10 20" fill="none" stroke="white" strokeWidth="0.5"></path>
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#pipes-pattern)"></rect>
-        </svg>
-      </div>,
-      
-      // Overlay for Air-Conditioning
-      <div className="absolute inset-0" key="overlay-4">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-transparent mix-blend-overlay"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px]"></div>
-        <svg className="absolute inset-0 w-full h-full opacity-30 mix-blend-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <pattern id="waves-pattern" patternUnits="userSpaceOnUse" width="20" height="10" x="0" y="0">
-            <path d="M 0 5 C 5 0, 15 0, 20 5" fill="none" stroke="white" strokeWidth="0.5"></path>
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#waves-pattern)"></rect>
-        </svg>
-      </div>
-    ];
-    
-    return overlays[index];
+  // Handle image click
+  const handleImageClick = (index) => {
+    setActiveImage(index);
   };
 
   return (
@@ -183,132 +111,99 @@ const Projects = () => {
             ref={headingRef}
             className="text-3xl md:text-4xl xl:text-5xl font-bold text-white mb-6"
           >
-            Our Expertise
+            Gallery of Work
           </h2>
           <p className="text-neutral-400">
-            Explore our specialized service areas that showcase our technical capabilities through examples of projects in different sectors.
+            A showcase of our completed projects and technical capabilities.
           </p>
         </div>
 
-        <div ref={projectsRef} className="relative max-w-6xl mx-auto">
-          {/* Project Display */}
+        <div ref={galleryRef} className="relative max-w-6xl mx-auto">
+          {/* Gallery Display */}
           <div className="grid md:grid-cols-5 gap-8">
-            {/* Project Thumbnails */}
+            {/* Image Thumbnails */}
             <div className="md:col-span-2 space-y-4">
-              {projectExamples.map((project, index) => (
+              {galleryImages.map((item, index) => (
                 <motion.div
-                  key={project.id}
-                  className={`p-0.5 rounded-lg relative cursor-pointer transition-all duration-300 ${
-                    activeProject === index
+                  key={item.id}
+                  className={`p-1 rounded-lg relative cursor-pointer transition-all duration-300 ${
+                    activeImage === index
                       ? "bg-gradient-to-r from-primary to-primary/30"
-                      : "bg-neutral-800/50 hover:bg-neutral-800"
+                      : "bg-neutral-800/30 hover:bg-neutral-800/50"
                   }`}
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => handleProjectClick(index)}
+                  onClick={() => handleImageClick(index)}
                 >
-                  <div className="bg-neutral-900 p-4 rounded-lg">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-sm text-primary mb-2">
-                          {project.category}
-                        </p>
-                        <h3
-                          className={`font-bold transition-all duration-300 ${
-                            activeProject === index
-                              ? "text-white"
-                              : "text-neutral-400"
-                          }`}
-                        >
-                          {project.title}
-                        </h3>
-                      </div>
-                    </div>
+                  <div className="bg-neutral-900/50 rounded-lg overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={`Work ${index + 1}`}
+                      className="w-full h-24 object-cover transition-all duration-300 hover:scale-105"
+                    />
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            {/* Featured Project Display */}
+            {/* Featured Image Display */}
             <div className="md:col-span-3">
               <motion.div
                 className="bg-neutral-900/80 backdrop-blur-sm rounded-lg overflow-hidden h-full"
-                key={activeProject}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                key={activeImage}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                {/* Project Image with Creative Overlay */}
-                <div className="h-64 md:h-72 relative overflow-hidden">
+                {/* Main Image */}
+                <div className="h-80 md:h-96 relative overflow-hidden">
                   <img
-                    src={projectExamples[activeProject].image}
-                    alt={projectExamples[activeProject].title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    src={galleryImages[activeImage].image}
+                    alt={`Featured work ${activeImage + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                   />
-                  {/* Creative overlay based on project type */}
-                  {getImageOverlay(activeProject)}
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 to-transparent opacity-60"></div>
+                  {/* Subtle overlay for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/20 to-transparent"></div>
                 </div>
 
+                {/* Navigation dots */}
                 <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <p className="text-primary mb-1">
-                        {projectExamples[activeProject].category}
-                      </p>
-                      <h3 className="text-xl font-bold text-white">
-                        {projectExamples[activeProject].title}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <p className="text-neutral-400">
-                    {projectExamples[activeProject].description}
-                  </p>
-
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    {[
-                      "Energy Efficient", 
-                      "Smart Integration", 
-                      "Sustainable", 
-                      "Cost Effective", 
-                      "Innovative Design", 
-                      "High Performance"
-                    ].slice(activeProject, activeProject + 3).map((tag, idx) => (
-                      <span 
-                        key={idx} 
-                        className="inline-block px-3 py-1 rounded-full text-xs bg-neutral-800 text-primary"
-                      >
-                        {tag}
-                      </span>
+                  <div className="flex justify-center space-x-2">
+                    {galleryImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleImageClick(index)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          activeImage === index
+                            ? "bg-primary scale-125"
+                            : "bg-neutral-600 hover:bg-neutral-500"
+                        }`}
+                      />
                     ))}
-                  </div>
-
-                  <div className="mt-6">
-                    <button className="group flex items-center text-primary">
-                      <span className="font-medium mr-3 relative overflow-hidden">
-                        View service details
-                        <span className="block h-0.5 w-full bg-primary/30 mt-1 group-hover:w-0 transition-all duration-300"></span>
-                        <span className="block h-0.5 w-0 bg-primary absolute bottom-0 left-0 group-hover:w-full transition-all duration-300"></span>
-                      </span>
-                      <svg
-                        className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        ></path>
-                      </svg>
-                    </button>
                   </div>
                 </div>
               </motion.div>
             </div>
+          </div>
+
+          {/* Optional: Grid View Toggle */}
+          <div className="mt-12 text-center">
+            {/* <button className="group inline-flex items-center px-6 py-3 bg-neutral-800/50 hover:bg-neutral-800 text-white rounded-lg transition-all duration-300">
+              <span className="mr-2">View All Projects</span>
+              <svg
+                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                ></path>
+              </svg>
+            </button> */}
           </div>
         </div>
       </div>
@@ -320,4 +215,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Gallery;

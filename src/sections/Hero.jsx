@@ -6,9 +6,21 @@ import buildingAnimation from "../assets/building.riv";
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   const animationContainerRef = useRef(null);
+  
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Features to showcase
   const features = [
@@ -17,6 +29,7 @@ const Hero = () => {
       title: "Contracting Excellence",
       description: "Premium quality construction and contracting services for all project types",
       color: "blue",
+      icon: "🏗️",
       position: { top: "20%", right: "10%" }
     },
     {
@@ -24,6 +37,7 @@ const Hero = () => {
       title: "Facilities Management",
       description: "Comprehensive facilities services to maintain and optimize your property",
       color: "emerald",
+      icon: "🏢",
       position: { bottom: "35%", left: "5%" }
     },
     {
@@ -31,6 +45,7 @@ const Hero = () => {
       title: "Technical Expertise",
       description: "Specialized technical solutions for complex industrial and commercial needs",
       color: "indigo",
+      icon: "⚙️",
       position: { bottom: "25%", right: "15%" }
     }
   ];
@@ -51,24 +66,26 @@ const Hero = () => {
   
   // Set up hover interaction
   const handleMouseEnter = () => {
-    if (hoverInput) hoverInput.value = true;
+    if (hoverInput && !isMobile) hoverInput.value = true;
   };
   
   const handleMouseLeave = () => {
-    if (hoverInput) hoverInput.value = false;
+    if (hoverInput && !isMobile) hoverInput.value = false;
   };
   
   // Cycle through features automatically
   useEffect(() => {
     const featureInterval = setInterval(() => {
       setActiveFeature(prev => (prev + 1) % features.length);
-    }, 5000);
+    }, 4000);
     
     return () => clearInterval(featureInterval);
   }, [features.length]);
   
-  // Parallax effect on scroll
+  // Parallax effect on scroll (disabled on mobile for performance)
   useEffect(() => {
+    if (isMobile) return;
+    
     const handleScroll = () => {
       if (!containerRef.current) return;
       
@@ -87,12 +104,10 @@ const Hero = () => {
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobile]);
   
   // Initialize animations
   const initCounters = () => {
-    // Since we removed the counters, this function is now just a placeholder
-    // We can use it for any initialization that needs to happen after the Rive animation loads
     console.log("Animation loaded successfully");
   };
   
@@ -104,7 +119,8 @@ const Hero = () => {
       text: "text-blue-400",
       border: "border-blue-600/50",
       glow: "shadow-blue-500/20",
-      bg: "bg-blue-900/90"
+      bg: "bg-blue-900/90",
+      light: "bg-blue-500/20"
     },
     emerald: {
       primary: "from-emerald-600 to-emerald-400",
@@ -112,7 +128,8 @@ const Hero = () => {
       text: "text-emerald-400",
       border: "border-emerald-600/50",
       glow: "shadow-emerald-500/20",
-      bg: "bg-emerald-900/90"
+      bg: "bg-emerald-900/90",
+      light: "bg-emerald-500/20"
     },
     indigo: {
       primary: "from-indigo-600 to-indigo-400",
@@ -120,7 +137,8 @@ const Hero = () => {
       text: "text-indigo-400",
       border: "border-indigo-600/50",
       glow: "shadow-indigo-500/20",
-      bg: "bg-indigo-900/90"
+      bg: "bg-indigo-900/90",
+      light: "bg-indigo-500/20"
     }
   };
   
@@ -129,209 +147,223 @@ const Hero = () => {
       ref={containerRef} 
       className="relative min-h-screen w-full overflow-hidden bg-black"
     >
-      {/* Animated background */}
+      {/* Enhanced animated background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-900 to-black opacity-90"></div>
       
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiMxNjE3MmYiIGZpbGwtb3BhY2l0eT0iLjAzIiBkPSJNMzYgMzRoLTJ2LTJoMnYyek0zMCAzNGgtMnYtMmgydjJ6TTI0IDM0aC0ydi0yaDJ2MnpNMTggMzRoLTJ2LTJoMnYyek0xMiAzNGgtMnYtMmgydjJ6TTYgMzRINHYtMmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDI4SDB2MmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDI0SDB2MmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDIwSDB2MmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDE2SDB2MmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDEySDB2MmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDhIMHYyaDJ2Mnk9Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDRIMHYyaDJ2Mnk9Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik02IDJoMnYtMkg2djJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0xMiAyaDJ2LTJoLTJ2MnpNMTggMmgydi0yaC0ydjJ6TTI0IDJoMnYtMmgtMnYyek0zMCAyaDJ2LTJoLTJ2MnpNMzYgMmgydi0yaC0ydjJ6Ii8+PC9nPjwvc3ZnPg==')] opacity-20"></div>
+      {/* Mobile-enhanced background patterns */}
+      {isMobile ? (
+        <>
+          {/* Mobile geometric patterns */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 left-10 w-32 h-32 border border-blue-500/30 rounded-full"></div>
+            <div className="absolute top-40 right-8 w-24 h-24 border-2 border-emerald-500/20 rotate-45"></div>
+            <div className="absolute bottom-32 left-6 w-20 h-20 border border-indigo-500/25 rounded-lg rotate-12"></div>
+            <div className="absolute bottom-48 right-12 w-16 h-16 border-2 border-blue-500/15 rounded-full"></div>
+          </div>
+          
+          {/* Mobile gradient mesh */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-emerald-900/10"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-indigo-900/5 to-transparent"></div>
+        </>
+      ) : (
+        /* Desktop grid overlay */
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiMxNjE3MmYiIGZpbGwtb3BhY2l0eT0iLjAzIiBkPSJNMzYgMzRoLTJ2LTJoMnYyek0zMCAzNGgtMnYtMmgydjJ6TTI0IDM0aC0ydi0yaDJ2MnpNMTggMzRoLTJ2LTJoMnYyek0xMiAzNGgtMnYtMmgydjJ6TTYgMzRINHYtMmgydjJ6Ii8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDI4SDB2MmgydjJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDI0SDB2MmgydjJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDIwSDB2MmgydjJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDE2SDB2MmgydjJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDEySDB2MmgydjJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDhIMHYyaDJ2Mnk9Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0yIDRIMHYyaDJ2Mnk9Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik02IDJoMnYtMkg2djJ6Ci8+PHBhdGggZmlsbD0iIzE2MTcyZiIgZmlsbC1vcGFjaXR5PSIuMDMiIGQ9Ik0xMiAyaDJ2LTJoLTJ2MnpNMTggMmgydi0yaC0ydjJ6TTI0IDJoMnYtMmgtMnYyek0zMCAyaDJ2LTJoLTJ2MnpNMzYgMmgydi0yaC0ydjJ6Ci8+PC9nPjwvc3ZnPg==')] opacity-20"></div>
+      )}
       
-      {/* Glowing orbs */}
+      {/* Enhanced glowing orbs with mobile optimization */}
       <motion.div 
-        className="absolute top-40 left-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-blue-600/20 to-blue-800/5 blur-3xl"
+        className={`absolute ${isMobile ? 'top-16 -left-8 w-64 h-64' : 'top-40 left-1/4 w-96 h-96'} rounded-full bg-gradient-to-br from-blue-600/30 to-blue-800/10 blur-3xl`}
         animate={{ 
           scale: [1, 1.2, 1],
-          opacity: [0.2, 0.3, 0.2],
+          opacity: [0.3, 0.5, 0.3],
         }}
         transition={{ 
           repeat: Infinity, 
-          duration: 12,
+          duration: 8,
           ease: "easeInOut" 
         }}
       />
       
       <motion.div 
-        className="absolute bottom-20 right-1/4 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-600/20 to-emerald-800/5 blur-3xl"
+        className={`absolute ${isMobile ? 'top-1/2 -right-16 w-56 h-56' : 'bottom-20 right-1/4 w-80 h-80'} rounded-full bg-gradient-to-br from-emerald-600/25 to-emerald-800/10 blur-3xl`}
         animate={{ 
           scale: [1, 1.3, 1],
-          opacity: [0.2, 0.3, 0.2],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ 
           repeat: Infinity, 
-          duration: 15,
+          duration: 10,
           ease: "easeInOut",
           delay: 1 
         }}
       />
       
       <motion.div 
-        className="absolute top-1/2 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-indigo-600/20 to-indigo-800/5 blur-3xl"
+        className={`absolute ${isMobile ? 'bottom-20 left-1/2 -translate-x-1/2 w-48 h-48' : 'top-1/2 right-1/3 w-64 h-64'} rounded-full bg-gradient-to-br from-indigo-600/20 to-indigo-800/10 blur-3xl`}
         animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.1, 0.2, 0.1],
+          scale: [1, 1.1, 1],
+          opacity: [0.15, 0.3, 0.15],
         }}
         transition={{ 
           repeat: Infinity, 
-          duration: 10,
+          duration: 12,
           ease: "easeInOut",
           delay: 2 
         }}
       />
       
       {/* Main content container */}
-      <div className="container mx-auto px-6 h-screen flex items-center relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="container mx-auto px-4 sm:px-6 min-h-screen flex items-center relative z-10 py-20 sm:py-16 lg:py-8">
+        <div className={`grid grid-cols-1 ${isMobile ? 'gap-8' : 'lg:grid-cols-2 gap-16'} items-center w-full`}>
           
           {/* Text content */}
           <motion.div 
             ref={contentRef}
-            className="relative z-10 space-y-8"
+            className="relative z-10 space-y-6 sm:space-y-8 text-center lg:text-left"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-          >
-            {/* Hidden company name */}
-            <motion.div
-              className="inline-block"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 0.7, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="h-px w-6 bg-white/40"></div>
-                <span className="uppercase tracking-widest text-sm text-white/60 font-light">Precision Contracting & Facilities Management</span>
-              </div>
-            </motion.div>
-            
-            {/* Main headline with animated text reveal */}
+          >            
+            {/* Enhanced main headline with two-line structure */}
             <div className="overflow-hidden">
               <motion.h1 
-                className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-none tracking-tight"
+                className={`${isMobile ? 'text-5xl sm:text-6xl' : 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl'} font-bold text-white leading-none tracking-tight`}
                 initial={{ y: 150 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
               >
-                <div className="overflow-hidden">
-                  <div className="pb-2">Build</div>
-                </div>
+                {/* First line: "Build Smart" */}
                 <div className="overflow-hidden">
                   <motion.div 
-                    className="pb-2 bg-gradient-to-r from-blue-400 to-blue-600 text-transparent bg-clip-text"
+                    className="pb-1 sm:pb-2 flex items-center justify-center lg:justify-start gap-4 md:gap-6"
                     initial={{ y: 150 }}
                     animate={{ y: 0 }}
-                    transition={{ duration: 1, delay: 0.7, ease: [0.33, 1, 0.68, 1] }}
+                    transition={{ duration: 1, delay: 0.6, ease: [0.33, 1, 0.68, 1] }}
                   >
-                    Smart
+                    <span>Build</span>
+                    <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-cyan-400 text-transparent bg-clip-text">
+                      Smart,
+                    </span>
                   </motion.div>
                 </div>
+                
+                {/* Second line: "Build Green" */}
                 <div className="overflow-hidden">
                   <motion.div 
-                    className="pb-2"
+                    className="flex items-center justify-center lg:justify-start gap-4 md:gap-6"
                     initial={{ y: 150 }}
                     animate={{ y: 0 }}
                     transition={{ duration: 1, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
                   >
-                    Build
-                  </motion.div>
-                </div>
-                <div className="overflow-hidden">
-                  <motion.div 
-                    className="bg-gradient-to-r from-emerald-400 to-emerald-600 text-transparent bg-clip-text"
-                    initial={{ y: 150 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1, delay: 0.9, ease: [0.33, 1, 0.68, 1] }}
-                  >
-                    Green
+                    <span>Build</span>
+                    <span className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 text-transparent bg-clip-text">
+                      Green
+                    </span>
                   </motion.div>
                 </div>
               </motion.h1>
             </div>
             
-            <motion.p 
-              className="text-slate-300 text-lg md:text-xl max-w-xl leading-relaxed"
+            {/* Enhanced description with better mobile styling */}
+            <motion.div
+              className="relative"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.2 }}
             >
-              Your Partner in <span className="text-blue-400 font-medium">Contracting</span>, 
-              <span className="text-emerald-400 font-medium"> Facilities</span>, and 
-              <span className="text-indigo-400 font-medium"> Technical Excellence</span>. A trusted provider of services in the UAE, delivering high-quality solutions for residential, commercial, and industrial projects.
-            </motion.p>
-            
-            {/* CTA buttons */}
-            <motion.div
-              className="flex flex-wrap gap-4 pt-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.4 }}
-            >
-              <button
-                className="relative group overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-emerald-600 px-10 py-4 text-white shadow-lg transition-all duration-300 ease-out hover:shadow-xl hover:scale-105"
-              >
-                <span className="relative z-10 font-medium tracking-wide flex items-center">
-                  Get Quotation Today
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-800/50 to-emerald-800/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
-                <span className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-0"></span>
-                <span className="absolute top-0 left-0 w-20 h-full bg-white/20 transform -skew-x-30 -translate-x-full group-hover:translate-x-[500%] transition-all duration-1000 ease-out"></span>
-              </button>
+              {isMobile && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"></div>
+              )}
+              <p className="text-slate-300 text-sm sm:text-base lg:text-lg xl:text-xl max-w-xl leading-relaxed mx-auto lg:mx-0">
+                Your Partner in <span className="text-blue-400 font-medium">Facilities Management</span> and 
+                <span className="text-emerald-400 font-medium"> Contracting</span>. A trusted provider of services in the UAE, delivering high-quality solutions for residential, commercial, and industrial projects.
+              </p>
             </motion.div>
             
-            {/* Feature highlights with animated reveal */}
+            {/* Enhanced feature highlights with improved mobile design */}
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pt-6 sm:pt-8"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.6 }}
             >
-              <div className="stat-item p-4 rounded-lg bg-blue-900/20 border border-blue-500/20 backdrop-blur-sm">
-                <div className="text-sm text-blue-300 uppercase tracking-wider font-medium mb-1">Residential</div>
-                <div className="text-xs text-slate-300">Premium solutions for residential properties</div>
-              </div>
-              <div className="stat-item p-4 rounded-lg bg-emerald-900/20 border border-emerald-500/20 backdrop-blur-sm">
-                <div className="text-sm text-emerald-300 uppercase tracking-wider font-medium mb-1">Commercial</div>
-                <div className="text-xs text-slate-300">Expert services for business facilities</div>
-              </div>
-              <div className="stat-item p-4 rounded-lg bg-indigo-900/20 border border-indigo-500/20 backdrop-blur-sm">
-                <div className="text-sm text-indigo-300 uppercase tracking-wider font-medium mb-1">Industrial</div>
-                <div className="text-xs text-slate-300">Technical excellence for industrial projects</div>
-              </div>
+              {features.map((feature, index) => (
+                <motion.div 
+                  key={feature.id}
+                  className={`stat-item p-3 lg:p-4 rounded-xl ${colorMap[feature.color].light} border ${colorMap[feature.color].border} backdrop-blur-sm relative overflow-hidden group cursor-pointer`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.8 + index * 0.2 }}
+                  whileHover={!isMobile ? { scale: 1.05, y: -5 } : {}}
+                  whileTap={isMobile ? { scale: 0.95 } : {}}
+                >
+                  <div className="relative z-10">
+                    <div className="flex items-center mb-2">
+                      <span className="text-base lg:text-lg mr-2">{feature.icon}</span>
+                      <div className={`text-xs lg:text-sm font-medium ${colorMap[feature.color].text} uppercase tracking-wider`}>
+                        {isMobile ? feature.title.split(' ')[0] : feature.title}
+                      </div>
+                    </div>
+                    <div className="text-xs text-slate-300 leading-relaxed">
+                      {isMobile ? `${feature.description.substring(0, 50)}...` : feature.description}
+                    </div>
+                  </div>
+                  
+                  {/* Hover effect */}
+                  <div className={`absolute inset-0 ${colorMap[feature.color].secondary} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                  
+                  {/* Corner accent */}
+                  <div className={`absolute top-0 right-0 w-8 h-8 ${colorMap[feature.color].secondary} opacity-20 transform rotate-45 translate-x-4 -translate-y-4`}></div>
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
           
-          {/* Building animation container */}
+          {/* Enhanced building animation container */}
           <motion.div 
             ref={animationContainerRef}
-            className="relative h-[600px] lg:h-[700px] w-full"
+            className={`relative ${isMobile ? 'h-[350px] sm:h-[450px] mt-8 order-first' : 'h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px]'} w-full`}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {/* Animation container with glassmorphism frame */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 to-black/50 backdrop-blur-sm rounded-xl border border-white/5 shadow-2xl overflow-hidden">
-              {/* Subtle grid overlay */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjAyIiBkPSJNMzYgMzRoLTJ2LTJoMnYyek0zMCAzNGgtMnYtMmgydjJ6TTI0IDM0aC0ydi0yaDJ2MnpNMTggMzRoLTJ2LTJoMnYyek0xMiAzNGgtMnYtMmgydjJ6TTYgMzRINHYtMmgydjJ6Ii8+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIuMDIiIGQ9Ik0yIDI4SDB2MmgydjJ6Ii8+PC9nPjwvc3ZnPg==')] opacity-10"></div>
+            {/* Enhanced glassmorphism container */}
+            <div className={`absolute inset-0 bg-gradient-to-b from-slate-900/60 to-black/60 backdrop-blur-sm ${isMobile ? 'rounded-2xl' : 'rounded-xl'} border border-white/10 shadow-2xl overflow-hidden`}>
+              
+              {/* Enhanced background patterns for mobile */}
+              {isMobile ? (
+                <div className="absolute inset-0">
+                  {/* Mobile-specific decorative elements */}
+                  <div className="absolute top-4 left-4 w-12 h-12 border-2 border-blue-500/20 rounded-full"></div>
+                  <div className="absolute top-4 right-4 w-8 h-8 border border-emerald-500/30 rotate-45"></div>
+                  <div className="absolute bottom-4 left-4 w-6 h-6 border border-indigo-500/25 rounded-full"></div>
+                  <div className="absolute bottom-4 right-4 w-10 h-10 border-2 border-blue-500/15 rotate-12"></div>
+                  
+                  {/* Mobile gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5"></div>
+                </div>
+              ) : (
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjAyIiBkPSJNMzYgMzRoLTJ2LTJoMnYyek0zMCAzNGgtMnYtMmgydjJ6TTI0IDM0aC0ydi0yaDJ2MnpNMTggMzRoLTJ2LTJoMnYyek0xMiAzNGgtMnYtMmgydjJ6TTYgMzRINHYtMmgydjJ6Ci8+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIuMDIiIGQ9Ik0yIDI4SDB2MmgydjJ6Ci8+PC9nPjwvc3ZnPg==')] opacity-10"></div>
+              )}
               
               {/* Rive animation */}
               <div className="relative h-full w-full flex items-center justify-center">
                 <RiveComponent className="w-full h-full" />
               </div>
               
-              {/* Highlighting corners */}
-              <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-blue-500/30"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-emerald-500/30"></div>
-              <div className="absolute bottom-0 left-0 w-20 h-20 border-b-2 border-l-2 border-indigo-500/30"></div>
-              <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-blue-500/30"></div>
+              {/* Enhanced corner highlights with mobile optimization */}
+              <div className={`absolute top-0 left-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-t-2 border-l-2 border-blue-500/40`}></div>
+              <div className={`absolute top-0 right-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-t-2 border-r-2 border-emerald-500/40`}></div>
+              <div className={`absolute bottom-0 left-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-b-2 border-l-2 border-indigo-500/40`}></div>
+              <div className={`absolute bottom-0 right-0 ${isMobile ? 'w-12 h-12' : 'w-20 h-20'} border-b-2 border-r-2 border-blue-500/40`}></div>
               
-              {/* Glow overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-600/5 to-emerald-600/5"></div>
+              {/* Enhanced glow overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-600/10 via-transparent to-emerald-600/10"></div>
               
-              {/* Feature indicators */}
-              {isLoaded && features.map((feature, index) => {
+              {/* Desktop feature indicators */}
+              {!isMobile && isLoaded && features.map((feature, index) => {
                 const color = colorMap[feature.color];
                 const isActive = activeFeature === index;
                 
@@ -342,9 +374,9 @@ const Hero = () => {
                     style={feature.position}
                     initial={{ opacity: 0, x: feature.position.left ? -20 : 20 }}
                     animate={{ 
-                      opacity: isActive ? 1 : 0.5,
+                      opacity: isActive ? 1 : 0.6,
                       x: 0,
-                      scale: isActive ? 1 : 0.9
+                      scale: isActive ? 1.05 : 0.95
                     }}
                     transition={{ 
                       duration: 0.5,
@@ -354,37 +386,43 @@ const Hero = () => {
                   >
                     {feature.position.left ? (
                       <>
-                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-2 px-3 rounded-md mr-2 shadow-lg ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[200px]`}>
-                          <div className={`font-medium mb-1 ${color.text}`}>{feature.title}</div>
+                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-3 px-4 rounded-lg mr-3 shadow-xl ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[220px]`}>
+                          <div className={`font-medium mb-2 ${color.text} flex items-center`}>
+                            <span className="mr-2">{feature.icon}</span>
+                            {feature.title}
+                          </div>
                           <AnimatePresence>
                             {isActive && (
                               <motion.div 
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
-                                className="text-white/80 text-xs leading-relaxed"
+                                className="text-white/85 text-xs leading-relaxed"
                               >
                                 {feature.description}
                               </motion.div>
                             )}
                           </AnimatePresence>
                         </div>
-                        <div className="w-20 h-px bg-gradient-to-l from-transparent to-[color:var(--feature-color)]" style={{"--feature-color": `rgb(var(--${feature.color}-500))`}}></div>
-                        <div className={`w-3 h-3 ${color.secondary} rounded-full ${isActive ? 'animate-pulse' : ''}`}></div>
+                        <div className="w-24 h-px bg-gradient-to-l from-transparent to-current opacity-60"></div>
+                        <div className={`w-4 h-4 ${color.secondary} rounded-full ${isActive ? 'animate-pulse shadow-lg' : ''} border border-white/20`}></div>
                       </>
                     ) : (
                       <>
-                        <div className={`w-3 h-3 ${color.secondary} rounded-full ${isActive ? 'animate-pulse' : ''}`}></div>
-                        <div className="w-20 h-px bg-gradient-to-r from-[color:var(--feature-color)] to-transparent" style={{"--feature-color": `rgb(var(--${feature.color}-500))`}}></div>
-                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-2 px-3 rounded-md ml-2 shadow-lg ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[200px]`}>
-                          <div className={`font-medium mb-1 ${color.text}`}>{feature.title}</div>
+                        <div className={`w-4 h-4 ${color.secondary} rounded-full ${isActive ? 'animate-pulse shadow-lg' : ''} border border-white/20`}></div>
+                        <div className="w-24 h-px bg-gradient-to-r from-current to-transparent opacity-60"></div>
+                        <div className={`${color.bg} backdrop-blur-sm text-white text-xs py-3 px-4 rounded-lg ml-3 shadow-xl ${color.border} ${isActive ? color.glow : ''} transition-all duration-300 max-w-[220px]`}>
+                          <div className={`font-medium mb-2 ${color.text} flex items-center`}>
+                            <span className="mr-2">{feature.icon}</span>
+                            {feature.title}
+                          </div>
                           <AnimatePresence>
                             {isActive && (
                               <motion.div 
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
-                                className="text-white/80 text-xs leading-relaxed"
+                                className="text-white/85 text-xs leading-relaxed"
                               >
                                 {feature.description}
                               </motion.div>
@@ -397,83 +435,179 @@ const Hero = () => {
                 );
               })}
               
-              {/* Rotating rings */}
-              <motion.div 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] border border-blue-500/10 rounded-full"
-                animate={{
-                  rotate: 360,
-                }}
-                transition={{
-                  duration: 60,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              ></motion.div>
+              {/* Enhanced rotating rings for desktop */}
+              {!isMobile && (
+                <>
+                  <motion.div 
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] border border-blue-500/15 rounded-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                  ></motion.div>
+                  
+                  <motion.div 
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-emerald-500/15 rounded-full"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                  ></motion.div>
+                </>
+              )}
               
-              <motion.div 
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-emerald-500/10 rounded-full"
-                animate={{
-                  rotate: -360,
-                }}
-                transition={{
-                  duration: 45,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              ></motion.div>
+              {/* Mobile floating indicators */}
+              {isMobile && isLoaded && (
+                <>
+                  {/* Mobile feature dots around animation */}
+                  <motion.div
+                    className="absolute top-6 left-6 w-3 h-3 bg-blue-500 rounded-full"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0 }}
+                  />
+                  <motion.div
+                    className="absolute top-6 right-6 w-3 h-3 bg-emerald-500 rounded-full"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
+                  />
+                  <motion.div
+                    className="absolute bottom-6 left-1/2 -translate-x-1/2 w-3 h-3 bg-indigo-500 rounded-full"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 1.4 }}
+                  />
+                  
+                  {/* Mobile progress ring */}
+                  <motion.div 
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-transparent rounded-full"
+                    style={{
+                      background: `conic-gradient(from 0deg, transparent, ${colorMap[features[activeFeature].color].secondary}20, transparent)`
+                    }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  />
+                </>
+              )}
             </div>
           </motion.div>
         </div>
       </div>
       
-      {/* Scroll indicator */}
+      {/* Enhanced mobile feature showcase */}
+      {isMobile && (
+        <motion.div 
+          className="relative z-10 px-4 pb-8"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2 }}
+        >
+          {/* Mobile service carousel */}
+          <div className="relative bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-2xl">
+            {/* Header */}
+            <div className="text-center mb-6">
+              <h3 className="text-white text-xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                Our Services
+              </h3>
+              <div className="flex justify-center space-x-3">
+                {features.map((feature, index) => (
+                  <motion.button
+                    key={index}
+                    className={`w-12 h-3 rounded-full transition-all duration-300 ${
+                      activeFeature === index 
+                        ? `${colorMap[feature.color].secondary} shadow-lg` 
+                        : 'bg-white/20'
+                    }`}
+                    onClick={() => setActiveFeature(index)}
+                    whileTap={{ scale: 0.9 }}
+                  />
+                ))}
+              </div>
+            </div>
+            
+            {/* Enhanced feature display */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeFeature}
+                initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -50, scale: 0.9 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="text-center"
+              >
+                <div className={`relative inline-block p-6 rounded-2xl ${colorMap[features[activeFeature].color].light} backdrop-blur-sm border ${colorMap[features[activeFeature].color].border} shadow-xl overflow-hidden`}>
+                  {/* Background pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className={`absolute top-2 right-2 w-8 h-8 ${colorMap[features[activeFeature].color].secondary} rounded-full blur-sm`}></div>
+                    <div className={`absolute bottom-2 left-2 w-6 h-6 ${colorMap[features[activeFeature].color].secondary} rounded-full blur-sm`}></div>
+                  </div>
+                  
+                  <div className="relative z-10">
+                    {/* Feature icon */}
+                    <div className="text-4xl mb-3">{features[activeFeature].icon}</div>
+                    
+                    {/* Feature title */}
+                    <h4 className={`font-bold text-lg mb-3 ${colorMap[features[activeFeature].color].text}`}>
+                      {features[activeFeature].title}
+                    </h4>
+                    
+                    {/* Feature description */}
+                    <p className="text-white/85 text-sm leading-relaxed max-w-xs mx-auto">
+                      {features[activeFeature].description}
+                    </p>
+                    
+                    {/* Call to action */}
+                    <motion.button
+                      className={`mt-4 px-6 py-2 rounded-full ${colorMap[features[activeFeature].color].secondary} text-white text-xs font-medium shadow-lg border border-white/20`}
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      Learn More
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
+      
+      {/* Enhanced scroll indicator */}
       <motion.div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-10"
+        className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-10"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2, duration: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
       >
-        <span className="text-white/60 text-sm mb-2 tracking-wider font-light">Explore More</span>
+        <span className="text-white/70 text-xs sm:text-sm mb-3 tracking-wider font-light">Explore More</span>
         <motion.div 
-          className="w-6 h-10 border border-white/20 rounded-full flex justify-center p-1"
+          className={`${isMobile ? 'w-5 h-8' : 'w-6 h-10'} border border-white/30 rounded-full flex justify-center p-1 bg-white/5 backdrop-blur-sm`}
           animate={{ y: [0, 5, 0] }}
-          transition={{ 
-            duration: 1.5, 
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <motion.div 
-            className="w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-emerald-400 rounded-full"
+            className={`${isMobile ? 'w-1 h-1' : 'w-1.5 h-1.5'} bg-gradient-to-r from-blue-400 to-emerald-400 rounded-full`}
             animate={{ 
-              y: [0, 8, 0],
+              y: [0, isMobile ? 6 : 8, 0],
               opacity: [0, 1, 0]
             }}
-            transition={{ 
-              duration: 1.5, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
       </motion.div>
       
-      {/* Floating particles */}
-      {[...Array(15)].map((_, index) => (
+      {/* Enhanced floating particles */}
+      {[...Array(isMobile ? 12 : 20)].map((_, index) => (
         <motion.div
           key={index}
-          className="absolute w-1 h-1 bg-white rounded-full"
+          className={`absolute ${isMobile ? 'w-1 h-1' : 'w-1.5 h-1.5'} rounded-full`}
           style={{ 
             left: `${Math.random() * 100}%`, 
             top: `${Math.random() * 100}%`,
-            opacity: Math.random() * 0.5 + 0.2
+            background: index % 3 === 0 ? '#3b82f6' : index % 3 === 1 ? '#10b981' : '#6366f1',
+            opacity: Math.random() * 0.6 + 0.2
           }}
           animate={{
-            y: [0, Math.random() * -30 - 10],
-            opacity: [0, Math.random() * 0.5 + 0.3, 0],
+            y: [0, Math.random() * -40 - 20],
+            opacity: [0, Math.random() * 0.8 + 0.4, 0],
+            scale: [0, 1, 0]
           }}
           transition={{
-            duration: Math.random() * 3 + 2,
+            duration: Math.random() * 4 + 3,
             repeat: Infinity,
             repeatType: "loop",
             ease: "easeInOut",
@@ -481,6 +615,18 @@ const Hero = () => {
           }}
         />
       ))}
+      
+      {/* Mobile-specific ambient elements */}
+      {isMobile && (
+        <>
+          {/* Mobile corner accents */}
+          <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-blue-500/20 rounded-tl-3xl"></div>
+          <div className="absolute top-0 right-0 w-20 h-20 border-r-2 border-t-2 border-emerald-500/20 rounded-tr-3xl"></div>
+          
+          {/* Mobile bottom gradient */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-slate-900/50 to-transparent pointer-events-none"></div>
+        </>
+      )}
     </div>
   );
 };

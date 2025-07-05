@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+// Import your company logo
+import companyLogo from '../assets/logo.png' // Update this path to match your logo location
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -103,23 +105,47 @@ const Navbar = () => {
         transition={{ duration: 0.3 }}
       >
         <div className="container mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <a href="#home" className="text-white font-bold text-2xl" onClick={(e) => handleNavClick(e, '#home')}>
-            Build<span className="text-primary">Craft</span>
-          </a>
+          {/* Logo Section */}
+          <motion.a 
+            href="#home" 
+            className="flex items-center space-x-3 group" 
+            onClick={(e) => handleNavClick(e, '#home')}
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Logo Container with White Background */}
+            <div className="relative">
+              <div className="bg-white rounded-lg p-2 shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/10">
+                <img
+                  src={companyLogo}
+                  alt="BuildCraft Logo"
+                  className="h-8 w-auto object-contain"
+                />
+              </div>
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-emerald-500/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+            </div>
+            
+            {/* Company Name - Keep Original */}
+            <span className="text-white font-bold text-2xl">
+              Build<span className="text-primary">Craft</span>
+            </span>
+          </motion.a>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:block">
             <ul className="flex space-x-8">
               {navLinks.map((link, index) => (
                 <li key={index}>
-                  <a 
+                  <motion.a 
                     href={link.link}
                     onClick={(e) => handleNavClick(e, link.link)}
-                    className="text-white/80 hover:text-primary transition-colors duration-300"
+                    className="text-white/80 hover:text-blue-400 transition-colors duration-300 relative group"
+                    whileHover={{ y: -1 }}
                   >
                     {link.title}
-                  </a>
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-emerald-400 group-hover:w-full transition-all duration-300"></span>
+                  </motion.a>
                 </li>
               ))}
             </ul>
@@ -127,28 +153,36 @@ const Navbar = () => {
           
           {/* Contact Button */}
           <div className="hidden md:block">
-            <a 
+            <motion.a 
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="px-5 py-2 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors duration-300"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-emerald-600 text-white rounded-full hover:from-blue-700 hover:to-emerald-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Get in Touch
-            </a>
+            </motion.a>
           </div>
           
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-white"
+          <motion.button 
+            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            whileTap={{ scale: 0.95 }}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
+              <motion.path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth="2" 
+                d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                animate={{ 
+                  d: isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
+                }}
+                transition={{ duration: 0.3 }}
+              />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </motion.header>
       
@@ -156,16 +190,30 @@ const Navbar = () => {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div 
-            className="fixed inset-0 z-40 md:hidden bg-black/90 backdrop-blur-md"
+            className="fixed inset-0 z-40 md:hidden bg-black/95 backdrop-blur-lg"
             initial="closed"
             animate="open"
             exit="closed"
             variants={menuVariants}
           >
             <div className="flex flex-col h-full">
-              <div className="flex justify-end p-6">
+              {/* Mobile Header with Logo */}
+              <div className="flex justify-between items-center p-6 border-b border-white/10">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-white rounded-lg p-2 shadow-lg">
+                    <img
+                      src={companyLogo}
+                      alt="BuildCraft Logo"
+                      className="h-6 w-auto object-contain"
+                    />
+                  </div>
+                  <span className="text-white font-bold text-xl">
+                    Build<span className="text-primary">Craft</span>
+                  </span>
+                </div>
+                
                 <button 
-                  className="text-white"
+                  className="text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -174,26 +222,49 @@ const Navbar = () => {
                 </button>
               </div>
               
-              <div className="flex-1 flex flex-col justify-center items-center">
+              {/* Mobile Navigation */}
+              <div className="flex-1 flex flex-col justify-center items-center py-8">
                 <nav>
-                  <ul className="space-y-6 text-center">
+                  <ul className="space-y-8 text-center">
                     {navLinks.map((link, index) => (
-                      <li key={index}>
+                      <motion.li 
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 + 0.2 }}
+                      >
                         <a 
                           href={link.link}
                           onClick={(e) => handleNavClick(e, link.link)}
-                          className="text-3xl text-white hover:text-primary transition-colors duration-300"
+                          className="text-2xl text-white hover:text-blue-400 transition-colors duration-300 block py-2"
                         >
                           {link.title}
                         </a>
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
                 </nav>
+                
+                {/* Mobile Contact Button */}
+                <motion.div 
+                  className="mt-12"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <a 
+                    href="#contact"
+                    onClick={(e) => handleNavClick(e, '#contact')}
+                    className="px-8 py-3 bg-gradient-to-r from-blue-600 to-emerald-600 text-white rounded-full font-medium shadow-lg inline-block"
+                  >
+                    Get in Touch
+                  </a>
+                </motion.div>
               </div>
               
-              <div className="p-10 text-center">
-                <p className="text-white/60 text-sm">© {new Date().getFullYear()} BuildCraft</p>
+              {/* Mobile Footer */}
+              <div className="p-6 text-center border-t border-white/10">
+                <p className="text-white/40 text-sm">© {new Date().getFullYear()} BuildCraft</p>
               </div>
             </div>
           </motion.div>
